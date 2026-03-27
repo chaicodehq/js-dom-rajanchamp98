@@ -1,3 +1,4 @@
+
 /**
  * 🍬 Kolkata Sweet Shop - createElement & appendChild
  *
@@ -62,12 +63,79 @@
  */
 export function createSweetItem(name, price, category) {
   // Your code here
+  //       - Creates a div element with class "sweet-item"
+  //  *      - Inside div: h3 (name), p with class "price" (text: "₹{price}"),
+  //  *        span with class "category" (text: category)
+  //  *      - Returns the div element
+  //  *      - Validation: name must be string, price must be number, category must be string
+  //  *      - Agar koi bhi param missing ya invalid type, return null
+
+  if (
+    !name ||
+    typeof name !== "string" ||
+    !price ||
+    typeof price != "number" ||
+    !category ||
+    typeof category != "string"
+  ) {
+    return null;
+  }
+  const divSweetItem = document.createElement("div");
+  divSweetItem.setAttribute("class", "sweet-item");
+  const h3 = document.createElement("h3");
+  h3.textContent = name;
+  const p = document.createElement("p");
+  p.setAttribute("class", "price");
+  p.textContent = `₹${price}`;
+  const span = document.createElement("span");
+  span.className = "category";
+  span.textContent = category;
+  divSweetItem.appendChild(h3);
+  divSweetItem.appendChild(p);
+  divSweetItem.appendChild(span);
+  return divSweetItem;
 }
 
 export function buildMenuBoard(sweets) {
   // Your code here
+  //    - Takes array of {name, price, category} objects
+  //  *      - Creates a div with id "menu-board"
+  //  *      - Loop through sweets, call createSweetItem for each
+  //  *      - Append each sweet item to menu-board
+  //  *      - Returns the menu-board div
+  //  *      - Empty array returns div with no children (bas empty menu-board)
+  //  *      - Agar sweets not array, return null
+  if (!Array.isArray(sweets)) return null;
+ 
+  const menuBoard = document.createElement("div");
+  menuBoard.setAttribute("id", "menu-board");
+   if (sweets.length == 0) {
+    return menuBoard
+  }
+  sweets.forEach((sweet) => {
+    const {name,price,category}=sweet
+    const sweetItem = createSweetItem(name,price,category);
+    menuBoard.appendChild(sweetItem);
+  });
+
+  return menuBoard;
 }
 
 export function addSpecialBadge(sweetElement, badgeText) {
   // Your code here
+//   - Takes a sweet-item element and badge text string
+//  *      - Creates a span with class "special-badge" and textContent = badgeText
+//  *      - Appends the span to sweetElement
+//  *      - Returns the modified sweetElement
+//  *      - Agar sweetElement null/undefined, return null
+//  *      - Agar badgeText not string or empty, return null
+if(!sweetElement) return null
+if(!badgeText || typeof badgeText !='string' || badgeText=="") return null
+const span = document.createElement("span")
+span.setAttribute("class","special-badge")
+span.textContent=badgeText
+sweetElement.appendChild(span)
+
+return sweetElement
+
 }
