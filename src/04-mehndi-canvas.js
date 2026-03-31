@@ -73,20 +73,105 @@
  */
 export function applyBaseStyle(element, color, size) {
   // Your code here
+//    *      - Sets element.style properties:
+//  *        backgroundColor = color
+//  *        width = size + "px"
+//  *        height = size + "px"
+//  *        borderRadius = "50%"
+//  *      - Returns the element
+//  *      - Agar element null/undefined, return null
+  if(!element) return null
+  element.style.backgroundColor=color
+  element.style.width=size+"px"
+  element.style.height=size+"px"
+  element.style.borderRadius="50%"
+
+  return element
+
+
 }
 
 export function setPatternStyle(element, styles) {
   // Your code here
+//   *      - Takes an object of CSS style properties
+//  *        e.g., { border: "2px solid brown", opacity: "0.8", transform: "rotate(45deg)" }
+//  *      - Applies each property to element.style
+//  *      - Returns count of properties applied
+//  *      - Agar element null/undefined, return -1
+//  *      - Agar styles not object or null, return 0
+if(!element) return -1
+if(!styles || typeof styles!='object') return 0
+
+let count=0
+
+for (const [key,value] of Object.entries(styles)){
+  element.style[key]=value
+  count++
+}
+
+
+return count
+
+
 }
 
 export function getComputedStyles(element, properties) {
   // Your code here
+//    *      - Takes an array of style property names
+//  *        e.g., ["backgroundColor", "width", "opacity"]
+//  *      - Returns object with those properties and their current values
+//  *        from element.style
+//  *        e.g., { backgroundColor: "brown", width: "100px", opacity: "0.8" }
+//  *      - Agar element null/undefined, return null
+//  *      - Agar properties not array, return null
+  if(!element) return null
+  if(!Array.isArray(properties)) return null
+
+  const propertyObj={}
+ 
+  properties.forEach(propertie=>{
+    if(element.style[propertie]){
+      propertyObj[propertie]=element.style[propertie]
+    }else{
+      propertyObj[propertie]=""
+    }
+  })
+  return propertyObj
+
 }
 
 export function toggleVisibility(element) {
   // Your code here
+//    *      - If element.style.display is "none", set it to ""
+//  *      - Else set element.style.display to "none"
+//  *      - Returns the new display value ("none" or "")
+//  *      - Agar element null/undefined, return null
+if(!element) return null
+
+if(element.style.display=="none"){
+  element.style.display=""
+}else{
+  element.style.display="none"
+}
+return element.style.display
+
 }
 
 export function animateElement(element, frames) {
-  // Your code here
+//  *      - Takes array of style objects (animation frames)
+//  *        e.g., [{ opacity: "0" }, { opacity: "0.5" }, { opacity: "1" }]
+//  *      - Simplified version: just applies the LAST frame's styles to element
+//  *      - Returns total number of frames
+//  *      - Agar element null/undefined, return -1
+//  *      - Agar frames not array or empty, return -1
+if(!element) return -1
+if(!Array.isArray(frames) || frames.length===0) return -1
+const framesLength=frames.length
+const lastFrame=frames[framesLength-1]
+for (const [key,value] of Object.entries(lastFrame)){
+  element.style[key]=value
+}
+return framesLength
+
+
 }
