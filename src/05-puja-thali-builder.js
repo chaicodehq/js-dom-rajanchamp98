@@ -59,16 +59,136 @@
  */
 export function setupAddButton(button, thaliElement, itemName) {
   // Your code here
+  //    *      - Adds a "click" event listener to button
+  //  *      - On click: creates an li element with textContent = itemName
+  //  *      - Appends the li to thaliElement
+  //  *      - Returns a cleanup function that removes the click listener
+  //  *      - Agar button, thaliElement, or itemName null/undefined, return null
+  if (!button || !thaliElement || !itemName) return null
+
+  const handleClick = () => {
+    const li = document.createElement("li")
+    li.textContent = itemName
+    thaliElement.append(li)
+  }
+
+  button.addEventListener("click", handleClick)
+
+
+  function removeListenerFunc() {
+    button.removeEventListener("click", handleClick)
+
+  }
+
+  return removeListenerFunc
+
 }
 
 export function setupRemoveButton(button, thaliElement) {
   // Your code here
+  //    *      - Adds a "click" event listener to button
+  //  *      - On click: removes the LAST child of thaliElement (if it has children)
+  //  *      - Returns a cleanup function that removes the listener
+  //  *      - Agar button or thaliElement null/undefined, return null
+
+  if (!button || !thaliElement) return null
+  const removeChildLast = () => {
+    const last = thaliElement.lastChild
+    if (last) {
+      thaliElement.removeChild(last)
+    }
+  }
+  button.addEventListener("click", removeChildLast)
+
+  return () => {
+    button.removeEventListener("click", removeChildLast)
+  }
 }
 
 export function setupToggleItem(button, thaliElement, itemName) {
   // Your code here
+  //    - Adds a "click" event listener to button
+  //  *      - On click: if thaliElement already has an li with textContent === itemName,
+  //  *        remove that li. If not, create and append a new li with itemName.
+  //  *      - Returns a cleanup function that removes the listener
+  //  *      - Agar any param null/undefined, return null
+  //  *
+
+  if (!button || !thaliElement || !itemName) return null
+
+  // for (const element of thaliElement.children){
+  //   if(element.innerContent===itemName){
+  //     console.log("true")
+  //   }
+  // }
+
+  const handleClick = () => {
+    const liExist = Array.from(thaliElement.children).find(li => li.textContent === itemName)
+    if (liExist) {
+      liExist.remove()
+    } else {
+      const li = document.createElement("li")
+      li.textContent = itemName
+      thaliElement.append(li)
+
+    }
+
+  }
+  button.addEventListener("click", handleClick)
+
+  const cleanerFunc = () => {
+    thaliElement.removeEventListener("click", handleClick)
+  }
+  return cleanerFunc
+
 }
 
 export function createThaliManager(thaliElement, counterElement) {
   // Your code here
+  //   - Creates a thali management object (no event listeners, direct methods)
+  //  *      - Returns object with:
+  //  *        addItem(name): creates li with textContent=name, appends to thaliElement,
+  //  *          updates counterElement.textContent with new child count. Returns the li.
+  //  *        removeItem(name): finds li with textContent===name in thaliElement,
+  //  *          removes it, updates counter. Returns true if found and removed, false if not.
+  //  *        getCount(): returns number of children in thaliElement
+  //  *        clear(): removes ALL children from thaliElement, updates counter to 0
+  //  *      - Agar thaliElement or counterElement null/undefined, return null
+  if (!thaliElement || !counterElement) return null
+  const methodCollection = {
+    addItem: (name) => {
+      const li = document.createElement("li")
+      li.textContent = name
+      thaliElement.append(li)
+      counterElement.textContent += 1;
+      return li
+    },
+    removeItem: (name) => {
+
+      const elementExist = Array.from(thaliElement.children).find((li) =>li.textContent === name)
+      if (elementExist) {
+        elementExist.remove()
+        counterElement.textContent = Array.from(thaliElement.children).length
+        return true
+      } else {
+        return false
+      }
+
+
+    },
+    getCount: () => {
+      const childCount = Array.from(thaliElement.children).length
+      return childCount
+
+    },
+    clear: () => {
+      thaliElement.replaceChildren()
+      counterElement.textContent = 0
+
+    }
+  }
+
+  return methodCollection
+
+
 }
